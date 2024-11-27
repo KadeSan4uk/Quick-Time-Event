@@ -4,13 +4,15 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public float bottomLineY = -3.5f; 
-    public float[] linePositions; 
-    public TextMeshProUGUI accuracyText; 
+    public float bottomLineY = -3.5f;
+    public float[] linePositions = { -3.5f, 0f, 3.5f };
+    public TextMeshProUGUI accuracyText;
 
     public void CheckHit(int lineIndex)
     {
-        GameObject[] cubes = GameObject.FindGameObjectsWithTag("Cube");
+        Debug.Log($"CheckHit {lineIndex}");
+
+        GameObject[] cubes = GameObject.FindGameObjectsWithTag($"Cube{lineIndex}");
 
         foreach (GameObject cube in cubes)
         {
@@ -21,18 +23,24 @@ public class GameManager : MonoBehaviour
                 DisplayAccuracy(distance);
 
                 Destroy(cube);
-                break;
+
+                Debug.Log($"Cube destroyed on line {lineIndex}");
+                return;
             }
         }
+
+        Debug.Log($"No cube found on line {lineIndex}");
     }
 
     private bool IsOnLine(GameObject cube, int lineIndex)
     {
-        return Mathf.Abs(cube.transform.position.x - linePositions[lineIndex]) < 0.1f;
+        float tolerance = 4f;
+
+        return Mathf.Abs(cube.transform.position.x - linePositions[lineIndex]) <= tolerance;
     }
 
     private void DisplayAccuracy(float distance)
     {
-        accuracyText.text = distance.ToString("F2");
+        accuracyText.text = "Precision: " + distance.ToString("F2");
     }
 }

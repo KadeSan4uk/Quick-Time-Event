@@ -1,22 +1,18 @@
 using UnityEngine;
 
+
 public class InputHandler : MonoBehaviour
 {
-    public GameManager gameManager; 
+    public GameManager gameManager;
 
-    void Update()
+    private PlayerInputActions _action;
+
+    private void Awake()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            gameManager.CheckHit(0); 
-        }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            gameManager.CheckHit(1); 
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            gameManager.CheckHit(2); 
-        }
-    }
+        _action = new PlayerInputActions();
+        _action.Enable();
+        _action.Player.Left.started += _ => gameManager.CheckHit(0);
+        _action.Player.Middle.started += _ => gameManager.CheckHit(1);
+        _action.Player.Right.started += _ => gameManager.CheckHit(2);
+    }    
 }
